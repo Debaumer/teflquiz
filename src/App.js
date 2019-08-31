@@ -4,23 +4,36 @@ import Register from './Containers/Register';
 import Quiz from './Containers/Quiz';
 import Answers from './Containers/Answers';
 import instance from './Utility/auxiliary';
+import quiz from './Assets/Questions';
 
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.testComplete = this.testComplete.bind(this);
   }
   state = {
     nameEntered: false,
     name: '',
-    displayQuiz: 'hidden',
+    displayQuiz: false,
     errorMessage: '',
-    hideRegister: false
+    hideRegister: false,
+    displayAnswers: false
   }
 
   componentDidMount() {
     window.scrollTo(0,0);
+  }
+
+  testComplete(array, answers, complete) {
+    console.log(arguments);
+    this.setState({
+      answers: array,
+      correctAnswerList: answers,
+      displayAnswers: true,
+      displayQuiz: false
+    })
   }
 
   handleSubmit(e) {
@@ -32,12 +45,12 @@ class App extends Component {
       return;
     }
     const name = e.target[0].value;
-    instance.post(`/${name}.json`,{firstname: name})
+    instance.post(`/${name}.json`,{firstname: name, beganAt: new Date()})
     .then(res => {
-      console.log(res);
+      console.log('response', res);
       this.setState({
         hideRegister: true,
-        displayQuiz: 'visible',
+        displayQuiz: true,
         name: name
       })
     })
@@ -52,9 +65,9 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Register hide={this.state.hideRegister} error={this.state.errorMessage} submit={(e) => this.handleSubmit(e)}/>
-        <Quiz display={this.state.displayQuiz} name={this.state.name}/>
-        <Answers display={this.state.displayAnswers}/>
+        <Register hide={this.state.hideRegister} error={this.state.errorMessage} submit={(e) => this.handleSubmit(e)} />
+        <Quiz testComplete={this.testComplete} displayQuiz={this.state.displayQuiz} name={this.state.name} />
+        <Answers displayAnswers={this.state.displayAnswers} answers={this.state.answers} quiz={quiz} />
       </div>
     );
   }

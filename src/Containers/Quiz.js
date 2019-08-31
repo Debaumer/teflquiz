@@ -5,8 +5,8 @@ import instance from '../Utility/auxiliary';
 
 class Quiz extends Component {
   state = {
-    currentPage: null,
     content: null,
+    testIsComplete: false,
     completeTest: [],
     answers: []
   };
@@ -17,6 +17,12 @@ class Quiz extends Component {
       content: quiz,
       loaded: true
     });
+
+    if(this.props.displayQuiz) {
+      this.setState({
+        displayQuiz: true
+      })
+    }
 
     let array = [];
     for(var i = 0; i < this.state.content.length; i++) {
@@ -63,45 +69,30 @@ class Quiz extends Component {
       if(e.target[i].checked) {
         var answer = e.target[i].value;
         var answerCode = e.target[i].getAttribute('index');
-        var item = new Object({answer, correct: null, answerCode});
+        var item = {answer, correct: null, answerCode};
         array.push(item);
       }
     }
-
     if(array.length < this.state.answers.length) {
       this.setState({
-        errorMessage: 'please fill out every answer!'
+        errorMessage: 'please fill out every question!'
       })
       return;
     }
 
-    console.log(array);
     for(var j = 0; j < this.state.answers.length; j++) {
-      console.log(this.state.answers[j] == array[j].answerCode);
       if(this.state.answers[j] == array[j].answerCode) {
-        console.log('correct!');
         array[j].correct = true;
       } else {
-        console.log('false');
         array[j].correct = false;
       }
-      console.log(array);
-      this.setState({
-        completeTest: array
+      await this.setState({
+        completeTest: array,
+        testIsComplete: true
       })
-      // if(array[j] === undefined) {
-      //   console.log('answer is', this.state.answers[j]);
-      // }
-      // else if (this.state.answers[j] === array[j].answerCode) {
-      //   console.log(this.state.answers[j], array[j].answerCode);
-      //   console.log('correct!');
-      // } else {
-      //   //do nothing
-      // }
     }
-
-    instance.post(`/${this.props.name}/introQuizAnswers.json`, {answers: array})
-    // var formData = new FormData(e.target);
+    this.props.testComplete(array, this.state.completeTest);
+    instance.post(`/${this.props.name}/introQuizAnswers.json`, {answers: array, completedAt: new Date()})
   }
 
   render() {
@@ -113,10 +104,16 @@ class Quiz extends Component {
         );
       })
     }
+    let displayValue;
+    if(this.props.displayQuiz) {
+      displayValue = 'block'
+    } else {
+      displayValue = 'none'
+    }
 
     return(
       <div className="quiz" style={{
-        visibility: this.props.display,
+        display: displayValue
       }}>
         <form onSubmit={(e) => this.handleFormSubmit(e)}>
         {questions}
