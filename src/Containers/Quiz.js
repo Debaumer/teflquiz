@@ -56,7 +56,7 @@ class Quiz extends Component {
     })
   }
 
-  handleFormSubmit(e) {
+  async handleFormSubmit(e) {
     e.preventDefault();
     var array = [];
     for(var i = 0; i < e.target.length; i++) {
@@ -67,7 +67,39 @@ class Quiz extends Component {
         array.push(item);
       }
     }
-    console.log('hello');
+
+    if(array.length < this.state.answers.length) {
+      this.setState({
+        errorMessage: 'please fill out every answer!'
+      })
+      return;
+    }
+
+    console.log(array);
+    for(var j = 0; j < this.state.answers.length; j++) {
+      console.log(this.state.answers[j] == array[j].answerCode);
+      if(this.state.answers[j] == array[j].answerCode) {
+        console.log('correct!');
+        array[j].correct = true;
+      } else {
+        console.log('false');
+        array[j].correct = false;
+      }
+      console.log(array);
+      this.setState({
+        completeTest: array
+      })
+      // if(array[j] === undefined) {
+      //   console.log('answer is', this.state.answers[j]);
+      // }
+      // else if (this.state.answers[j] === array[j].answerCode) {
+      //   console.log(this.state.answers[j], array[j].answerCode);
+      //   console.log('correct!');
+      // } else {
+      //   //do nothing
+      // }
+    }
+
     instance.post(`/${this.props.name}/introQuizAnswers.json`, {answers: array})
     // var formData = new FormData(e.target);
   }
@@ -82,13 +114,13 @@ class Quiz extends Component {
       })
     }
 
-
     return(
       <div className="quiz" style={{
         visibility: this.props.display,
       }}>
         <form onSubmit={(e) => this.handleFormSubmit(e)}>
         {questions}
+        <p style={{color: 'red'}}>{this.state.errorMessage}</p>
         <input style={{
           cursor: 'pointer',
           padding: '20px',

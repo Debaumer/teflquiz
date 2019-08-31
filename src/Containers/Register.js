@@ -23,7 +23,7 @@ class Register extends Component {
 
     return (
       <div>
-        <form style={formStyle} onSubmit={this.props.submit} className="register">
+        <form  autoComplete="off" style={formStyle} onSubmit={this.props.submit} className="register">
           <label htmlFor="firstname">Please Enter your first name</label>
           <p style={{color: 'red'}}>{this.props.error}</p>
           <input style={{
