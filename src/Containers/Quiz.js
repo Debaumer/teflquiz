@@ -58,14 +58,16 @@ class Quiz extends Component {
 
   handleFormSubmit(e) {
     e.preventDefault();
-    console.log(e.target);
-    var array = []
+    var array = [];
     for(var i = 0; i < e.target.length; i++) {
       if(e.target[i].checked) {
-        console.log(i,' is checked for: ', e.target[i].value);
-        array.push(e.target[i].value);
+        var answer = e.target[i].value;
+        var answerCode = e.target[i].getAttribute('index');
+        var item = new Object({answer, correct: null, answerCode});
+        array.push(item);
       }
     }
+    console.log('hello');
     instance.post(`/${this.props.name}/introQuizAnswers.json`, {answers: array})
     // var formData = new FormData(e.target);
   }
@@ -79,6 +81,8 @@ class Quiz extends Component {
         );
       })
     }
+
+
     return(
       <div className="quiz" style={{
         visibility: this.props.display,

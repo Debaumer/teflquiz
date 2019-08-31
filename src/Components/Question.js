@@ -37,7 +37,7 @@ const radioButtonStyle = {
 
 let answers = props.answers.map((item, index) => {
   return (
-    <div AnswerIndex={index} style={radioStyle} key={item}> <input style={radioButtonStyle} name={props.question} type="radio" value={item}/> {item}</div>
+    <div style={radioStyle} key={item}> <input index={props.index} style={radioButtonStyle} name={props.question} type="radio" value={item}/> {item}</div>
   )
 })
 return (
