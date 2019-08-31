@@ -1,6 +1,6 @@
 
-module.exports.quiz = {
-    0: {
+const quiz = [
+     {
       "question": "Can I park here?",
       "answers": [
         "Sorry, I did that",
@@ -9,7 +9,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 2,
     },
-    1: {
+     {
       "question": "What colour will you paint the children's bedroom?",
       "answers": [
         "I hope it was right",
@@ -18,7 +18,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 1,
     },
-    2 : {
+      {
       "question": "Shall we go the gym now?",
       "answers": [
         "I'm too tired",
@@ -27,7 +27,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 0
     },
-    3 : {
+      {
       "question": "His eyes were .... bad that he couldn't read the number plate of the car in front.",
       "answers": [
         "such",
@@ -37,7 +37,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 2
     },
-    4 :{
+     {
       "question" : "The company needs to decide .... and for all what its position is on this issue.",
       "answers" : [
         "here",
@@ -47,7 +47,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 1
     },
-    5 :{
+     {
       "question" : "Don't put your cup on the .... of the table - someone will knock it off",
       "answers" : [
         "outside",
@@ -57,7 +57,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 1
     },
-    6 :{
+     {
       "question" : "The singer ended the concert .... her most popular song",
       "answers" : [
         "by",
@@ -67,7 +67,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 1
     },
-    7 :{
+     {
       "question" : "The shop didn't have the shoes I wanted, but they've .... a pair specially for me.",
       "answers" : [
         "ordered",
@@ -77,7 +77,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 0
     },
-    8 :{
+     {
       "question" : "Have you got time to discuss your work now or are you .... to leave?",
       "answers" : [
         "thinking",
@@ -87,7 +87,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 3
     },
-    9 :{
+     {
       "question" : "She came to live here .... a month ago",
       "answers" : [
         "quite",
@@ -97,7 +97,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 3
     },
-    10: {
+      {
       "question": "I left my last job because I had no .... to travel.",
       "answers" : [
         "place",
@@ -107,7 +107,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 2
     },
-    11 :{
+     {
       "question" : "It wasn't a bad crash and a .... damage was done to my car.",
       "answers" : [
         "little",
@@ -117,7 +117,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 0
     },
-    12 :{
+     {
       "question" : "I'd rather you .... to her why we can't go.",
       "answers" : [
         "can explain",
@@ -127,7 +127,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 1
     },
-    13 :{
+     {
       "question" : "Before making a decision, the leader considered all .... of the arguments",
       "answers" : [
         "sides",
@@ -137,7 +137,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 0
     },
-    14 :{
+     {
       "question" : "This new printer is recommended as being .... reliable.",
       "answers" : [
         "greatly",
@@ -147,7 +147,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 1
     },
-    15: {
+      {
       "question": "What is a 'verb' in the English language?",
       "answers": [
         "A name for a person, place, or thing",
@@ -156,7 +156,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 2
     },
-    16: {
+      {
       "question": "What is a 'noun' in the English language?",
       "answers": [
         "A name for a person, place, or thing",
@@ -165,7 +165,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 0
     },
-    17: {
+      {
       "question": "What is an 'adjective' in the English language?",
       "answers": [
         "A name for a person, place, or thing",
@@ -174,7 +174,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 1
     },
-    18: {
+      {
       "question": "What word is the 'subject' of the following sentence: The dog jumped over the fox",
       "answers": [
         "dog",
@@ -184,7 +184,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 0
     },
-    19: {
+      {
       "question": "What word is the 'object' of the following sentence: Daniel filled out the paperwork",
       "answers": [
         "Daniel",
@@ -194,7 +194,7 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 3
     },
-    20: {
+      {
       "question": "What is the tense of the following sentence: Jamie walked home last tuesday",
       "answers": [
        "Present",
@@ -203,4 +203,6 @@ module.exports.quiz = {
       ],
       "correctAnswerIndex": 1
     },
-  }
+  ]
+
+export default quiz;
