@@ -34,6 +34,11 @@ const radioButtonStyle = {
   opacity: '1',
 }
 
+const textareaStyle = {
+  font: 'sans-serif',
+  borderRadius: '20px',
+  border: '3px black solid',
+}
 
 let answers = props.answers.map((item, index) => {
   return (
@@ -42,7 +47,7 @@ let answers = props.answers.map((item, index) => {
 })
 
 if(!answers) {
-  answers = <textarea className="answer"></textarea>;
+  answers = <textarea style={textareaStyle} className="answer"></textarea>;
 }
 
 return (
@@ -56,4 +61,5 @@ return (
 )
 
 }
+
 export default question;
