@@ -100,7 +100,7 @@ class Quiz extends Component {
     if(this.state.loaded) {
       questions = this.state.content.map((item, index) => {
         return (
-          <Question question={item.question} key={index} index={index} answers={item.answers}/>
+          <Question question={item.question} key={index} index={index} answers={item.answers || null}/>
         );
       })
     }
