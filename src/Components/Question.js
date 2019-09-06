@@ -40,6 +40,11 @@ let answers = props.answers.map((item, index) => {
     <div style={radioStyle} key={item}> <input index={index} style={radioButtonStyle} name={props.question} type="radio" value={item}/> {item}</div>
   )
 })
+
+if(!answers) {
+  answers = <textarea className="answer"></textarea>;
+}
+
 return (
   <div style={questionStyle} className="question" id={props.questionId}>
     <div style={itemsList}>
