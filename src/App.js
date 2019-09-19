@@ -3,8 +3,10 @@ import './App.css';
 import Register from './Containers/Register';
 import Quiz from './Containers/Quiz';
 import Answers from './Containers/Answers';
+import Auth from './Containers/Auth';
 import instance from './Utility/auxiliary';
 import quiz from './Assets/Questions';
+import {Link, BrowserRouter} from 'react-router-dom';
 
 
 class App extends Component {
@@ -65,6 +67,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+      <BrowserRouter>
+
+      </BrowserRouter>
+        <Auth />
         <Register hide={this.state.hideRegister} error={this.state.errorMessage} submit={(e) => this.handleSubmit(e)} />
         <Quiz testComplete={this.testComplete} displayQuiz={this.state.displayQuiz} name={this.state.name} />
         <Answers displayAnswers={this.state.displayAnswers} answers={this.state.answers} quiz={quiz} />

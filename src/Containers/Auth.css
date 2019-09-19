@@ -1,0 +1,11 @@
+.authFormContainer {
+
+}
+
+.authFormContainer input {
+  padding: 5px;
+  border-radius: 40px;
+  text-align: center;
+  margin-bottom: 10px;
+  border: 1px black solid;
+}
