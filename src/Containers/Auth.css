@@ -1,11 +1,63 @@
-.authFormContainer {
-
+.auth {
+  border: 1px black solid;
+  border-radius: 5px;
+  width: 50%;
+  height: 50%;
+  margin: 20px auto 40px auto;
+  padding: 25px;
+  position: relative;
 }
 
-.authFormContainer input {
-  padding: 5px;
+h1 {
+  background-color: black;
+  color: white;
+  position: absolute;
+  width: 100%;
+  top: 10px;
+  left: 0px;
+}
+
+#authFormContainer {
+  margin: 75px auto 0px auto;
+  display: flex;
+  flex-flow: wrap column;
+  align-Items: space-between;
+  justify-content: center;
+}
+
+#authFormContainer input {
+  padding:5px;
   border-radius: 40px;
   text-align: center;
   margin-bottom: 10px;
   border: 1px black solid;
+}
+
+#submitButton {
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px;
+  height: 60px;
+
+}
+
+.danger {
+
+}
+
+.success {
+
+}
+
+.invalid {
+  border: 1px red solid;
+}
+
+.errorMessage {
+  padding: 2px;
+  border: 1px red dashed;
+  z-index: 999;
+  color: red;
+  background-color: white;
+  box-shadow: 5px 5px black;
 }
