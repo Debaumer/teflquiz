@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import './Auth.css';
 import instance from '../Utility/auxiliary';
-
+import authInstance from '../Utility/authentication';
+import axios from 'axios';
 
 class Auth extends Component {
   state = {
@@ -127,7 +128,34 @@ class Auth extends Component {
         data[key] = this.state.controls[key].value;
       }
     }
+    //// TODO: check for signup or login and
+    //// validate password against confirm password on signup
     console.log(data);
+    const authData = {
+      email: data.email,
+      password: data.password,
+      returnSecureToken: true
+    }
+    if(this.state.isSignup) {
+      axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD_M3vdOf4elHSHpBnVxO6D0vpEIN5wM0U',authData)
+      .then(res => {
+        console.log(res.data);
+        window.localStorage.setItem('authToken', res.data.idToken)
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    } else {
+      axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD_M3vdOf4elHSHpBnVxO6D0vpEIN5wM0U', authData)
+      .then(res => {
+        console.log(res.data);
+        console.log(res.data.idToken);
+        window.localStorage.setItem('authToken', res.data.idToken)
+      }).catch(err => {
+        console.log(err);
+      })
+    }
+
 
   }
 
@@ -146,6 +174,7 @@ class Auth extends Component {
 
   render() {
     const formElementsArray = [];
+
     for (let key in this.state.controls) {
       formElementsArray.push({
         id: key,
