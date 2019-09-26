@@ -9,6 +9,12 @@ import QuizList from './Components/QuizList';
 import Spinner from './Shared/UI/Spinner'
 import Nav from './Components/Nav';
 
+import Homework from './Components/Homework';
+import Exercises from './Components/Exercises';
+import Reading from './Components/Reading';
+import About from './Components/About';
+
+
 import {BrowserRouter,Switch, Route, Redirect} from 'react-router-dom';
 
 
@@ -24,6 +30,7 @@ class App extends Component {
     displayQuiz: false,
     loading: false,
     errorMessage: '',
+    showNavBar: true,
 
   }
 
@@ -119,6 +126,12 @@ class App extends Component {
     this.stopLoading();
   }
 
+  toggleNavBar() {
+    this.setState(prevState => {
+      return {showNavBar: !prevState.showNavBar}
+    })
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     if(e.target[0].value.length === 0) {
@@ -150,17 +163,40 @@ class App extends Component {
     return (
       <div className="App">
       <BrowserRouter>
-      <Nav onLogout={e => this.logoutHandler(e)} validAuth={this.state.isAuthenticated}/>
+        <Nav
+          toggleNavBar={() => this.toggleNavBar()}
+          showNavBar={this.state.showNavBar}
+          onLogout={e => this.logoutHandler(e)}
+          validAuth={this.state.isAuthenticated}
+        />
         <Switch>
-          <Route exact path="/auth" render={() => <Auth
-            loadingStart={() => this.startLoading()}
-            doneLoading={() => this.stopLoading()}
-            onAuth={(token, localId, expiresIn) => this.handleAuthSubmit(token, localId, expiresIn)}
-            validAuth={this.state.isAuthenticated}
-            />
-          }/>
-          <Route exact path="/library" render={() => <QuizList/> }/>
-          <Route exact path="/quiz/:quizId" render={() =>( <div><Quiz testComplete={this.state.testComplete} displayQuiz={this.state.displayQuiz} name={this.state.name}/> <Answers displayAnswers={this.state.displayAnswers} answers={this.state.answers} quiz={quiz}/></div>)}/>
+          <div id="component">
+            <Route exact path="/auth"
+              render={() => <Auth
+                loadingStart={() => this.startLoading()}
+                doneLoading={() => this.stopLoading()}
+                onAuth={(token, localId, expiresIn) => this.handleAuthSubmit(token, localId, expiresIn)}
+                validAuth={this.state.isAuthenticated}
+              />
+            }/>
+            <Route exact path="/homework" render={() => <Homework/>}/>
+            <Route exact path="/exercises" render={() => <Exercises/>}/>
+            <Route exact path="/reading" render={() => <Reading/>}/>
+            <Route exact path="/about" render={() => <About/>}/>
+            <Route exact path="/library" render={() => <QuizList/> }/>
+            <Route exact path="/quiz/:quizId" render={() =>
+              ( <div>
+                  <Quiz
+                    testComplete={this.state.testComplete}
+                    displayQuiz={this.state.displayQuiz}
+                    name={this.state.name}/>
+                  <Answers
+                    displayAnswers={this.state.displayAnswers}
+                    answers={this.state.answers}
+                    quiz={quiz}/>
+                  </div>)
+              }/>
+          </div>
         </Switch>
       </BrowserRouter>
       </div>

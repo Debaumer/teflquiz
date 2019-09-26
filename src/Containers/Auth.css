@@ -8,14 +8,6 @@
   position: relative;
 }
 
-h1 {
-  background-color: black;
-  color: white;
-  position: absolute;
-  width: 100%;
-  top: 10px;
-  left: 0px;
-}
 
 #authFormContainer {
   margin: 75px auto 0px auto;

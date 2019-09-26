@@ -1,4 +1,4 @@
-.navbar {
+#navbar {
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;
@@ -22,16 +22,13 @@
   margin: 30px 30px 30px 0px;
 }
 
-div {
-  margin:
-}
-
-.navLink:active{
-  color: red;
-}
-
-.navLink:hover{
-  color: red;
+#drawerToggle {
+  position: absolute;
+  left: 90%;
+  top: 45%;
+  background-color: black;
+  border: none;
+  color: white;
 }
 
 .navLink:visited {
