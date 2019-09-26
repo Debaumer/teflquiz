@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import Question from '../Components/Question';
-import quiz from '../Assets/Questions';
 import instance from '../Utility/auxiliary';
 
 class Quiz extends Component {
@@ -14,7 +13,7 @@ class Quiz extends Component {
   async componentDidMount() {
 
     await this.setState({
-      content: quiz,
+      content: this.props.quiz,
       loaded: true
     });
 

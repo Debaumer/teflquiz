@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
+import {Redirect} from 'react-router-dom';
 import './Auth.css';
+
 import instance from '../Utility/auxiliary';
 import authInstance from '../Utility/authentication';
+import {updateObject} from '../Utility/updateObject';
 import axios from 'axios';
 
 class Auth extends Component {
@@ -89,6 +92,19 @@ class Auth extends Component {
     })
   }
 
+  resetPasswordHandler() {
+    axios.post('https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyD_M3vdOf4elHSHpBnVxO6D0vpEIN5wM0U', {requestType: 'PASSWORD_RESET', email: ''})
+      .then(res => {
+        console.log(res.data);
+        this.setState({
+          errorMessage: 'check your email for a password reset link'
+        })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
   checkValidity = ( value, rules ) => {
       let isValid = true;
       if ( !rules ) {
@@ -122,41 +138,52 @@ class Auth extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    this.props.loadingStart();
     var data = {};
     for(var key in this.state.controls) {
       if(this.state.controls[key].value && this.state.controls[key].valid) {
         data[key] = this.state.controls[key].value;
       }
     }
-    //// TODO: check for signup or login and
-    //// validate password against confirm password on signup
-    console.log(data);
+
+    if(this.state.isSignup && data.password !== data.confirmPassword) {
+      this.setState({
+        errorMessage: 'Passwords do not match'
+      })
+      this.props.doneLoading();
+      throw new Error('Passwords do not match');
+    }
+
     const authData = {
       email: data.email,
       password: data.password,
       returnSecureToken: true
     }
+
     if(this.state.isSignup) {
+
       axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD_M3vdOf4elHSHpBnVxO6D0vpEIN5wM0U',authData)
       .then(res => {
-        console.log(res.data);
-        window.localStorage.setItem('authToken', res.data.idToken)
+        this.props.onAuth(res.data.idToken, res.data.localId, res.data.expiresIn)
+        this.props.doneLoading();
+
       })
       .catch(err => {
         console.log(err);
+        this.props.doneLoading();
       })
     } else {
+
       axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD_M3vdOf4elHSHpBnVxO6D0vpEIN5wM0U', authData)
       .then(res => {
         console.log(res.data);
-        console.log(res.data.idToken);
-        window.localStorage.setItem('authToken', res.data.idToken)
+        this.props.onAuth(res.data.idToken, res.data.localId, res.data.expiresIn)
+        this.props.doneLoading();
       }).catch(err => {
         console.log(err);
+        this.props.doneLoading();
       })
     }
-
-
   }
 
   inputChangedHandler = (event, controlName) => {
@@ -173,6 +200,12 @@ class Auth extends Component {
   }
 
   render() {
+    let authRedirect = null;
+    if(this.props.validAuth) {
+      authRedirect = <Redirect to="/"/>
+    }
+
+
     const formElementsArray = [];
 
     for (let key in this.state.controls) {
@@ -197,7 +230,7 @@ class Auth extends Component {
         )
       })
     } else {
-      form = formElementsArray.map(formElement=> {
+      form = formElementsArray.map(formElement => {
         if( formElement.config.elementConfig.login ) {
           return (
             <input
@@ -217,12 +250,20 @@ class Auth extends Component {
 
     return (
       <div className="auth">
+      {authRedirect}
         <h1>{this.state.isSignup ? 'Register' : 'Login'} </h1>
         <form onSubmit={this.handleSubmit} id="authFormContainer">
           {form}
           <input type="submit" value="submit"/>
         </form>
         <button id='submitButton' onClick={() => this.toggleAuthModeHandler()}>{this.state.isSignup ? "Got an account? Click here to switch to login" : "Don't have an account? Click here to create one"}</button>
+        <p style={{color: 'red'}}>{this.state.errorMessage}</p>
+        {//// TODO: make a modal for error in signing in
+        }
+      { /* <a style={{
+          textDecoration: 'underline',
+          cursor: 'pointer'
+        }} onClick={() => this.resetPasswordHandler()}>Click here to reset your password</a> */}
       </div>
     )
   }

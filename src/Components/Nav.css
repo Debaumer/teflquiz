@@ -1,0 +1,39 @@
+.navbar {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  background-color: black;
+  height: 100%;
+  width: 100px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  margin: 0px 0px;
+  padding: 15px 20px 0px 10px;
+}
+
+.navLink {
+  font-size: 18px;
+  padding: 2%;
+  color: white;
+  width: 90%;
+  border: 5px white solid;
+  border-radius: 10%;
+  margin: 30px 30px 30px 0px;
+}
+
+div {
+  margin:
+}
+
+.navLink:active{
+  color: red;
+}
+
+.navLink:hover{
+  color: red;
+}
+
+.navLink:visited {
+  color: white;
+}

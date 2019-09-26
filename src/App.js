@@ -1,35 +1,47 @@
 import React, {Component} from 'react';
 import './App.css';
-import Register from './Containers/Register';
 import Quiz from './Containers/Quiz';
 import Answers from './Containers/Answers';
 import Auth from './Containers/Auth';
 import instance from './Utility/auxiliary';
-import quiz from './Assets/Questions';
-import {Link, BrowserRouter, Route} from 'react-router-dom';
+import quiz from './Assets/Quizzes/introQuiz';
+import QuizList from './Components/QuizList';
+import Spinner from './Shared/UI/Spinner'
+import Nav from './Components/Nav';
+
+import {BrowserRouter,Switch, Route, Redirect} from 'react-router-dom';
 
 
 class App extends Component {
-  constructor(props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.testComplete = this.testComplete.bind(this);
-    this.handleAuthSubmit = this.handleAuthSubmit.bind(this);
-    this.checkAuthToken  =   this.checkAuthToken.bind(this);
-  }
   state = {
+    firstname: '',
+    idToken: '',
+    localId: '',
+    isAuthenticated: false,
     nameEntered: false,
-    name: '',
-    displayQuiz: false,
-    errorMessage: '',
     hideRegister: false,
     displayAnswers: false,
-    authToken: null,
-    validAuth: false,
+    displayQuiz: false,
+    loading: false,
+    errorMessage: '',
+
   }
 
   componentDidMount() {
     window.scrollTo(0,0);
+    this.checkAuthState();
+  }
+
+  startLoading() {
+    this.setState({
+      loading: true
+    })
+  }
+
+  stopLoading() {
+    this.setState({
+      loading: false
+    })
   }
 
   testComplete(array, answers, complete) {
@@ -42,12 +54,69 @@ class App extends Component {
     })
   }
 
-  checkAuthToken() {
-
+  checkAuthTimeout(expirationTime) {
+    setTimeout(() => {
+      console.log('session has expired');
+      this.logoutHandler();
+    }, expirationTime * 1000)
   }
 
-  handleAuthSubmit(e) {
+  checkAuthState() {
+    const token = localStorage.getItem('token');
+    const localId = localStorage.getItem('localId');
+    if(!token || !localId) {
+      console.log(token, localId);
+      this.logoutHandler();
+    } else {
+      const expirationDate = new Date(localStorage.getItem('expirationDate'));
+      if(expirationDate < new Date()) {
+        console.log(expirationDate, 'is less than', new Date());
+        this.logoutHandler();
+      } else {
+        console.log(expirationDate);
+        this.checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000);
+        this.setState({
+          isAuthenticated: true,
+          idToken: token,
+          localId: localId
+        })
+      }
+    }
+  }
 
+  handleAuthSubmit(token, localId, expiresIn) {
+    if(!token || !localId) {
+      throw new Error('No token(s) to submit!')
+    }
+    const expirationDate = new Date(new Date().getTime() +  expiresIn * 1000);
+    this.setState({
+      localId: localId,
+      token: token,
+      isAuthenticated: true
+    })
+    this.checkAuthTimeout(expiresIn);
+    localStorage.setItem('token', token);
+    localStorage.setItem('expirationDate', expirationDate);
+    localStorage.setItem('localId', localId);
+    this.stopLoading();
+  }
+
+  logoutHandler(e) {
+    if(e) {
+      e.preventDefault();
+    }
+    console.log('logged out');
+    this.setState({
+      firstname: null,
+      idToken: null,
+      localId: null,
+      expirationTime: null,
+      isAuthenticated: false
+    })
+    localStorage.removeItem('token');
+    localStorage.removeItem('expirationDate');
+    localStorage.removeItem('localId');
+    this.stopLoading();
   }
 
   handleSubmit(e) {
@@ -56,8 +125,8 @@ class App extends Component {
       this.setState({
         errorMessage: 'Please enter a name'
       })
-      return;
     }
+
     const name = e.target[0].value;
     instance.post(`/${name}.json`,{firstname: name, beganAt: new Date()})
     .then(res => {
@@ -77,15 +146,23 @@ class App extends Component {
   }
 
   render() {
+
     return (
       <div className="App">
       <BrowserRouter>
-        <Route exact path="/" render={() => <Auth/>} />
+      <Nav onLogout={e => this.logoutHandler(e)} validAuth={this.state.isAuthenticated}/>
+        <Switch>
+          <Route exact path="/auth" render={() => <Auth
+            loadingStart={() => this.startLoading()}
+            doneLoading={() => this.stopLoading()}
+            onAuth={(token, localId, expiresIn) => this.handleAuthSubmit(token, localId, expiresIn)}
+            validAuth={this.state.isAuthenticated}
+            />
+          }/>
+          <Route exact path="/library" render={() => <QuizList/> }/>
+          <Route exact path="/quiz/:quizId" render={() =>( <div><Quiz testComplete={this.state.testComplete} displayQuiz={this.state.displayQuiz} name={this.state.name}/> <Answers displayAnswers={this.state.displayAnswers} answers={this.state.answers} quiz={quiz}/></div>)}/>
+        </Switch>
       </BrowserRouter>
-        <Auth onAuthSubmit={this.handleAuthSubmit} />
-        <Register hide={this.state.hideRegister} error={this.state.errorMessage} submit={(e) => this.handleSubmit(e)} />
-        <Quiz testComplete={this.testComplete} displayQuiz={this.state.displayQuiz} name={this.state.name} />
-        <Answers displayAnswers={this.state.displayAnswers} answers={this.state.answers} quiz={quiz} />
       </div>
     );
   }

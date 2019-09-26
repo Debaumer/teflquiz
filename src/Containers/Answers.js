@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import quiz from '../Assets/Questions.js';
 import Answer from '../Components/Answer';
 import instance from '../Utility/auxiliary';
 
@@ -26,7 +25,7 @@ class Answers extends Component {
       window.scrollTo(0,0)
       answers = this.props.answers.map((item, index) => {
         return (
-          <Answer question={quiz[index].question} key={index} index={index} correct={item.correct} answer={item.answer}/>
+          <Answer question={this.props.answers[index].question} key={index} index={index} correct={item.correct} answer={item.answer}/>
         )
       })
     }
