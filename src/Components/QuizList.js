@@ -1,21 +1,30 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 
 const QuizList = (props) => {
-
-  const listItems = props.quizzes.map(item => {
-    console.log('mounted quizzlist');
-    return (
-      <div key={item.id}>
-        <h4>{item.id}</h4>
-        <p>{item.description}</p>
-      </div>
-    )
-  })
+  let listContent = null;
+  if(props.quizzes) {
+    console.log(props.quizzes);
+    listContent = props.quizzes.map(item => {
+      return (
+        <div key={item.id}>
+          <Link to={{
+            pathname:`/homework/quiz/${item.name}`,
+            state: {
+              fromHomeworkPage: true,
+              content: item.content
+            }
+          }}>The first quiz to test your skills</Link>
+          <p>{item.description}</p>
+        </div>
+      )
+    })
+  }
 
   return (
     <div className="quizList">
-      {listItems}
+      {listContent}
     </div>
   )
 }

@@ -14,7 +14,6 @@ import Exercises from './Components/Exercises';
 import Reading from './Components/Reading';
 import About from './Components/About';
 
-
 import {BrowserRouter,Switch, Route, Redirect} from 'react-router-dom';
 
 
@@ -27,11 +26,10 @@ class App extends Component {
     nameEntered: false,
     hideRegister: false,
     displayAnswers: false,
-    displayQuiz: false,
+    displayQuiz: true,
     loading: false,
     errorMessage: '',
     showNavBar: true,
-
   }
 
   componentDidMount() {
@@ -51,16 +49,6 @@ class App extends Component {
     })
   }
 
-  testComplete(array, answers, complete) {
-    console.log(arguments);
-    this.setState({
-      answers: array,
-      correctAnswerList: answers,
-      displayAnswers: true,
-      displayQuiz: false
-    })
-  }
-
   checkAuthTimeout(expirationTime) {
     setTimeout(() => {
       console.log('session has expired');
@@ -72,15 +60,12 @@ class App extends Component {
     const token = localStorage.getItem('token');
     const localId = localStorage.getItem('localId');
     if(!token || !localId) {
-      console.log(token, localId);
       this.logoutHandler();
     } else {
       const expirationDate = new Date(localStorage.getItem('expirationDate'));
       if(expirationDate < new Date()) {
-        console.log(expirationDate, 'is less than', new Date());
         this.logoutHandler();
       } else {
-        console.log(expirationDate);
         this.checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000);
         this.setState({
           isAuthenticated: true,
@@ -153,22 +138,30 @@ class App extends Component {
     .catch(error => {
       console.log(error);
       this.setState({
-        errorMessage: 'there is an error'
+        errorMessage: 'there is an error!'
       })
     })
   }
 
   render() {
-
-    return (
-      <div className="App">
-      <BrowserRouter>
-        <Nav
-          toggleNavBar={() => this.toggleNavBar()}
-          showNavBar={this.state.showNavBar}
-          onLogout={e => this.logoutHandler(e)}
-          validAuth={this.state.isAuthenticated}
-        />
+    let routes = (
+      <Switch>
+        <div id="component">
+          <Route exact path="/auth"
+            render={() => <Auth
+              loadingStart={() => this.startLoading()}
+              doneLoading={() => this.stopLoading()}
+              onAuth={(token, localId, expiresIn) => this.handleAuthSubmit(token, localId, expiresIn)}
+              validAuth={this.state.isAuthenticated}
+            />
+          }/>
+          <Route exact path="/about" render={() => <About/>}/>
+          <Redirect to="/" />
+        </div>
+      </Switch>
+    )
+    if(this.state.isAuthenticated) {
+      routes = (
         <Switch>
           <div id="component">
             <Route exact path="/auth"
@@ -184,20 +177,41 @@ class App extends Component {
             <Route exact path="/reading" render={() => <Reading/>}/>
             <Route exact path="/about" render={() => <About/>}/>
             <Route exact path="/library" render={() => <QuizList/> }/>
-            <Route exact path="/quiz/:quizId" render={() =>
-              ( <div>
-                  <Quiz
-                    testComplete={this.state.testComplete}
-                    displayQuiz={this.state.displayQuiz}
-                    name={this.state.name}/>
-                  <Answers
-                    displayAnswers={this.state.displayAnswers}
-                    answers={this.state.answers}
-                    quiz={quiz}/>
-                  </div>)
-              }/>
+            <Route path="/homework/quiz/:quizName"
+              component={Quiz}
+              testComplete={(array, completeTest) => this.testComplete(array, completeTest)}
+              displayQuiz={this.state.displayQuiz}
+              name={this.state.name}
+              // render={() => {
+              //   console.log('route for quiz render accessed');
+              //   return ( <div>
+              //         <Quiz
+              //           testComplete={this.state.testComplete}
+              //           displayQuiz={this.state.displayQuiz}
+              //           name={this.state.name}/>
+              //         <Answers
+              //           displayAnswers={this.state.displayAnswers}
+              //           answers={this.state.answers}
+              //           quiz={quiz}/>
+              //         </div>)}
+            />
+            <Route path=""/>
+            <Redirect to="/" />
           </div>
         </Switch>
+      )
+    }
+
+    return (
+      <div className="App">
+      <BrowserRouter>
+        <Nav
+          toggleNavBar={() => this.toggleNavBar()}
+          showNavBar={this.state.showNavBar}
+          onLogout={e => this.logoutHandler(e)}
+          validAuth={this.state.isAuthenticated}
+        />
+        {routes}
       </BrowserRouter>
       </div>
     );

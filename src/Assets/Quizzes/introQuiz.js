@@ -1,5 +1,18 @@
 
-const quiz = [
+const quiz = {
+     "id": "0",
+     "location": {
+       "postcode/ZIPcode": "2830",
+       "country": "australia",
+       "state/province": "new south wales",
+       "town/city": "Dubbo",
+       "organisation/employer": "department of education and training",
+       "street address": "Myall St",
+     },
+     "name": "introQuiz",
+     "description": "The quiz to test your skills!",
+     "tags": "",
+     "content": [
      {
       "question": "Can I park here?",
       "answers": [
@@ -204,5 +217,6 @@ const quiz = [
       "correctAnswerIndex": 1
     },
   ]
+}
 
 export default quiz;

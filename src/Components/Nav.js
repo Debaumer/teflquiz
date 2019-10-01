@@ -5,7 +5,6 @@ import {Transition} from 'react-transition-group';
 
 
 const Nav = props => {
-  console.log(props.showNavBar);
   const duration = 150;
 
   const defaultStyle = {
