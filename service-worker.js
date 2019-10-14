@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/teflquiz/precache-manifest.0ec7e0aebb34eb00bbbfb9d143c82104.js"
+  "/teflquiz/precache-manifest.faa902fd9f40d84737dbb00a7bc7fede.js"
 );
 
 self.addEventListener('message', (event) => {
