@@ -165,6 +165,10 @@ class Auth extends Component {
       axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyD_M3vdOf4elHSHpBnVxO6D0vpEIN5wM0U',authData)
       .then(res => {
         this.props.onAuth(res.data.idToken, res.data.localId, res.data.expiresIn)
+        console.log(authData);
+        instance.post(``)
+          .then(res => {console.log(res);})
+          .catch(err => {console.log(err);});
         this.props.doneLoading();
 
       })
@@ -173,7 +177,6 @@ class Auth extends Component {
         this.props.doneLoading();
       })
     } else {
-
       axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD_M3vdOf4elHSHpBnVxO6D0vpEIN5wM0U', authData)
       .then(res => {
         console.log(res.data);

@@ -15,7 +15,7 @@ class Quiz extends Component {
     console.log(this.props);
     console.log(this.props.location.state);
     let array = [];
-    let quiz = this.props.quiz || this.props.location.state.content;
+    let quiz = this.props.quiz || this.props.location.state.content.quiz;
     console.log(quiz);
     for(var i = 0; i < quiz.length; i++) {
       array.push(quiz[i].correctAnswerIndex)
@@ -69,36 +69,42 @@ class Quiz extends Component {
   async handleFormSubmit(e) {
     e.preventDefault();
     var array = [];
-    // for(var i = 0; i < e.target.length; i++) {
-    //   if(e.target[i].checked) {
-    //     var answer = e.target[i].value;
-    //     var answerCode = e.target[i].getAttribute('index');
-    //     var item = {answer, correct: null, answerCode};
-    //     array.push(item);
-    //   }
-    // }
-    // // if(array.length < this.state.answers.length) {
-    // //   this.setState({
-    // //     errorMessage: 'please fill out every question!'
-    // //   })
-    // //   return;
-    // // }
-    //
-    // for(var j = 0; j < this.state.answers.length; j++) {
-    //   if(this.state.answers[j] == array[j].answerCode) {
-    //     array[j].correct = true;
-    //   } else {
-    //     array[j].correct = false;
-    //   }
-    //   await this.setState({
-    //     completeTest: array,
-    //     testIsComplete: true
-    //   })
-    // }
+    for(var i = 0; i < e.target.length; i++) {
+      if(e.target[i].checked) {
+        var answer = e.target[i].value;
+        var answerCode = e.target[i].getAttribute('index');
+        var item = {answer, correct: null, answerCode};
+        array.push(item);
+      }
+    }
+    if(array.length < this.state.answers.length) {
+      this.setState({
+        errorMessage: 'please fill out every question!'
+      })
+      return;
+    }
+
+    for(var j = 0; j < this.state.answers.length; j++) {
+      if(this.state.answers[j] == array[j].answerCode) {
+        array[j].correct = true;
+      } else {
+        array[j].correct = false;
+      }
+      await this.setState({
+        completeTest: array,
+        testIsComplete: true
+      })
+    }
     array = [1,2,3]
     console.log(this.props);
     this.testComplete(array, this.state.completeTest);
     instance.post(`/${this.props.name}/introQuizAnswers.json`, {answers: array, completedAt: new Date()})
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {
+      console.log(err);
+    })
   }
 
   render() {

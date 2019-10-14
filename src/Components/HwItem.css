@@ -1,0 +1,11 @@
+.hwCard {
+  border: 1px black solid;
+  border-radius: 20px;
+  width: 500px;
+  position: relative;
+  cursor: pointer;
+}
+
+.hwCard:hover{
+  background-color: rgba(100,10,155,0.1)
+}

@@ -1,6 +1,7 @@
 
 const quiz = {
      "id": "0",
+     "type": "quiz",
      "location": {
        "postcode/ZIPcode": "2830",
        "country": "australia",
@@ -12,7 +13,7 @@ const quiz = {
      "name": "introQuiz",
      "description": "The quiz to test your skills!",
      "tags": "",
-     "content": [
+     "quiz": [
      {
       "question": "Can I park here?",
       "answers": [

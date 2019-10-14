@@ -2,28 +2,20 @@ import React from 'react';
 import Quiz from '../Containers/Quiz';
 import QuizList from './QuizList';
 import instance from '../Utility/auxiliary';
+import HwItem from './HwItem';
 import quiz from '../Assets/Quizzes/introQuiz';
+import testQuiz from '../Assets/Quizzes/testQuiz';
 
 const Homework = props => {
-console.log(quiz);
   const quizzes = [quiz]
-  // function contentLoader() {
-  //   console.log('contentLoader');
-  //   instance.get('/BING')
-  //     .then(res => {
-  //       console.log(res);
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     })
-  // }
-  //
-  // contentLoader()
+  const homeworkItems = quizzes.map((item, index) => {
+    return null;
+  });
 
   return (
-    <div className="homework">
+    <div className="homework" key={Math.random()}>
       <h1>Homework</h1>
-      <QuizList quizzes={quizzes}/>
+      <HwItem title={'introQuiz'} type={'quiz'} content={testQuiz} />
     </div>
   )
 }
